@@ -20,7 +20,7 @@ The below mentioned category of features are extracted from the URL data:
 3.   HTML & Javascript based Features<br>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In this category 4 features are extracted.
 
-*The details pertaining to these features are mentioned in the URL Feature Extraction.ipynb [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1HkO7TF0RHnsMYoSbM0Olkx-2WeLY4v0P?usp=sharing)
+The details pertaining to these features are mentioned in the URL Feature Extraction.ipynb [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1HkO7TF0RHnsMYoSbM0Olkx-2WeLY4v0P?usp=sharing)
 
 So, all together 17 features are extracted from the 10,000 URL dataset and are stored in 'urldata.csv' file in the Dataset folder.
 
