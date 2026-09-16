@@ -1,121 +1,40 @@
-# Sign Language Translator
+# Phishing Website Detection by Machine Learning
 
-A real-time American Sign Language (ASL) translation web application powered by MediaPipe 3D Hand Landmark Tracking, TensorFlow Lite deep learning, Scikit-Learn gesture memory, and a Streamlit web interface.
+## Objective
+A phishing website is a common social engineering method that mimics trustful uniform resource locators (URLs) and webpages. The objective of this project is to train machine learning models and deep neural nets on the dataset created to predict phishing websites. Both phishing and benign URLs of websites are gathered to form a dataset and from them required URL and website content-based features are extracted. The performance level of each model is measures and compared.
 
----
+## Data Collection
+The set of phishing URLs are collected from opensource service called **PhishTank**. This service provide a set of phishing URLs in multiple formats like csv, json etc. that gets updated hourly. To download the data: https://www.phishtank.com/developer_info.php. From this dataset, 5000 random phishing URLs are collected to train the ML models.
 
-## Key Features
+The legitimate URLs are obatined from the open datasets of the University of New Brunswick, https://www.unb.ca/cic/datasets/url-2016.html. This dataset has a collection of benign, spam, phishing, malware & defacement URLs. Out of all these types, the benign url dataset is considered for this project. From this dataset, 5000 random legitimate URLs are collected to train the ML models.
 
-- **Real-Time Video Translation**: Translates hand signs from live webcam video streams with ultra-low latency.
-- **MediaPipe 3D Landmark Tracking**: Tracks 21 anatomical hand keypoints, making detection invariant to background lighting, skin tone, or camera distance.
-- **Gesture Calibration & Memory**: Teach the AI custom hand signs directly from the UI. Recorded gestures are saved and retrained in real time.
-- **Sentence Builder**: Accumulates recognized gesture signs into full sentences with consecutive frame stability checks to eliminate flicker.
-- **Session Controls & Export**: Interactive controls for Space, Backspace, and Clear, with downloadable timestamped CSV session logs.
-- **Performance Monitor**: Integrated real-time FPS counter and frame processing pipeline.
+The above mentioned datasets are uploaded to the 'Dataset' folder
 
----
+## Feature Extraction
+The below mentioned category of features are extracted from the URL data:
 
-## Project Structure
+1.   Address Bar based Features <br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In this category 9 features are extracted.
+2.   Domain based Features<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In this category 4 features are extracted.
+3.   HTML & Javascript based Features<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In this category 4 features are extracted.
 
-```
-sign-language-translator/
-├── app/
-│   ├── main.py                     # Streamlit application entry point
-│   ├── hand_tracking.py            # MediaPipe 3D landmark detection module
-│   ├── inference.py                # TensorFlow Lite model inference engine
-│   ├── landmark_classifier.py      # Custom gesture memory & keypoint classifier
-│   ├── asl_chart.png               # ASL gesture reference chart
-│   └── app.py                      # Application launcher alias
-├── notebooks/
-│   ├── 01_data_exploration.ipynb   # Data exploration, augmentation, & preprocessing
-│   └── 02_train_cnn_model.ipynb    # CNN architecture training, evaluation, & TFLite export
-├── data/                           # Datasets (gitignored)
-│   ├── raw/                        # Raw dataset CSV files
-│   ├── processed/                  # Preprocessed train/val/test split numpy arrays
-│   └── custom_gestures.json        # Recorded custom gesture landmark samples
-├── models/                         # Saved models (gitignored)
-│   ├── sign_cnn.h5                 # Keras HDF5 model weights
-│   └── sign_cnn.tflite             # Quantized TFLite model for real-time inference
-├── start.bat                       # One-click Windows startup script
-├── venv/                           # Python virtual environment
-├── requirements.txt                # Dependency specifications
-└── README.md                       # Project documentation
-```
+The details pertaining to these features are mentioned in the URL Feature Extraction.ipynb [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1EoyWrOXXA_okS7AAJwSuCNMnii7xE4je?usp=sharing)
 
----
+So, all together 17 features are extracted from the 10,000 URL dataset and are stored in 'urldata.csv' file in the Dataset folder.
 
-## Quick Start (Windows)
+## Models & Training
 
-Simply double-click **`start.bat`** or run:
+Before stating the ML model training, the data is split into 80-20 i.e., 8000 training samples & 2000 testing samples. From the dataset, it is clear that this is a supervised machine learning task. There are two major types of supervised machine learning problems, called classification and regression.
 
-```cmd
-start.bat
-```
+This data set comes under classification problem, as the input URL is classified as phishing (1) or legitimate (0). The supervised machine learning models (classification) considered to train the dataset in this project are:
 
----
+* Decision Tree
+* Random Forest
+* Multilayer Perceptrons
+* XGBoost
+* Autoencoder Neural Network
+* Support Vector Machines
 
-## Setup & Manual Installation
-
-### 1. Environment Setup
-
-**Windows (PowerShell):**
-```powershell
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-```
-
-**macOS / Linux:**
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### 2. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## Running the Application Manually
-
-Launch the Streamlit web application:
-
-```powershell
-streamlit run app/main.py
-```
-
-1. Open your web browser at `http://localhost:8501`.
-2. Select your webcam index and click **Start Camera**.
-3. Hold your hand in camera view to translate ASL gestures in real time.
-4. Expand **Gesture Calibration & Memory** to record and train custom hand signs.
-
----
-
-## Model Training Workflow
-
-To retrain the CNN models on updated or custom datasets:
-
-1. **Launch JupyterLab**:
-   ```powershell
-   jupyter lab
-   ```
-2. **Data Exploration & Preprocessing**:
-   - Run `notebooks/01_data_exploration.ipynb` to process datasets and save split arrays to `data/processed/`.
-3. **Model Training & TFLite Export**:
-   - Run `notebooks/02_train_cnn_model.ipynb` to train the CNN model and automatically export `models/sign_cnn.h5` and `models/sign_cnn.tflite`.
-
-### Notebooks on Google Colab
-
-- [Data Exploration & Preprocessing](https://colab.research.google.com/drive/1fEOOhLk_1XU6ftWQA652mFHEifZBY5FT?usp=sharing)
-- [CNN Model Training & TFLite Export](https://colab.research.google.com/drive/1xjDDYRZf30x13hqnjBA1FZY0phPprFR4?usp=sharing)
-
----
-
-## Tech Stack
-
-- **Deep Learning & Inference**: TensorFlow, Keras, TensorFlow Lite
-- **Computer Vision & Tracking**: OpenCV, MediaPipe Tasks
-- **Machine Learning**: Scikit-Learn
-- **Data & Analytics**: NumPy, Pandas, Matplotlib, Seaborn
-- **Web Interface**: Streamlit
+All these models are trained on the dataset and evaluation of the model is done with the test dataset. The elaborate details of the models & its training are mentioned in Phishing Website Detection_Models & Training.ipynb [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1m_l-XBO6_69mj5Mi0Y3MkUB4zujzW8xG?usp=sharing)
